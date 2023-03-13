@@ -48,13 +48,18 @@ class Sender
      * @param ConnectorInterface|null $connector
      * @return self
      */
-    public static function createFromLoop(LoopInterface $loop, ConnectorInterface $connector = null)
-    {
+    public static function createFromLoop(
+        LoopInterface $loop,
+        ConnectorInterface $connector = null,
+        $maximumTimeToKeepAliveIdleConnection = 0.001
+    ) {
         if ($connector === null) {
             $connector = new Connector(array(), $loop);
         }
 
-        return new self(new HttpClient(new ClientConnectionManager($connector, $loop)));
+        return new self(
+            new HttpClient(new ClientConnectionManager($connector, $loop, $maximumTimeToKeepAliveIdleConnection))
+        );
     }
 
     private $http;

@@ -79,7 +79,7 @@ class Browser
      * @param null|LoopInterface|ConnectorInterface $loop
      * @throws \InvalidArgumentException for invalid arguments
      */
-    public function __construct($connector = null, $loop = null)
+    public function __construct($connector = null, $loop = null, $maximumTimeToKeepAliveIdleConnection = 0.001)
     {
         // swap arguments for legacy constructor signature
         if (($connector instanceof LoopInterface || $connector === null) && ($loop instanceof ConnectorInterface || $loop === null)) {
@@ -94,7 +94,7 @@ class Browser
 
         $loop = $loop ?: Loop::get();
         $this->transaction = new Transaction(
-            Sender::createFromLoop($loop, $connector),
+            Sender::createFromLoop($loop, $connector, $maximumTimeToKeepAliveIdleConnection),
             $loop
         );
     }
